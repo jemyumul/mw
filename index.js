@@ -66,6 +66,10 @@ app.use(cors());
 app.listen(8081, () => console.log("API Server is running..."));
 
 //#region Test Routes
+app.get("/", (req, res) => {
+    res.json({ message: "ok" });
+  });
+
 app.get("/outfit", (req, res) => {
     const tops = ['Black', 'White', 'Orange', 'Navy Blue'];
     const jeans = ['Grey', 'Dark Grey', 'Black', 'Navy'];
