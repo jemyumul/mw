@@ -1,8 +1,10 @@
 const mysql = require("mysql2/promise");
+const parseDbUrl = require("parse-database-url")
+
 async function getConnection() {
   // create the connection
-  console.log(process.env.DB_HOST)
-  const connection = await mysql.createConnection(process.env.DATABASE_URL);
+  const dbConfig = parseDbUrl(process.env.DATABASE_URL);
+  const connection = await mysql.createConnection(dbConfig);
   return connection;
 }
 
