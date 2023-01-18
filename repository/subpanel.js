@@ -19,7 +19,7 @@ const createSubPanel = async (code, panelCode, classname, dynamicstyle, order) =
   const date = new Date()
   return connection.execute(
     // "delete from section where section_id =?", [id]
-    "INSERT INTO subPANEL (subpanel_code, panel_code, subpanel_classname, subpanel_dynamicstyle, subpanel_datecreated, subpanel_dateupdated, subpanel_order) " +
+    "INSERT INTO subpanel (subpanel_code, panel_code, subpanel_classname, subpanel_dynamicstyle, subpanel_datecreated, subpanel_dateupdated, subpanel_order) " +
     "VALUES (?, ?, ?, ?, ?, ?, ?)", [code, panelCode, classname, dynamicstyle, date, date, order]
   );
 };
@@ -29,7 +29,7 @@ const updateSubPanel = async (id, code, sectionCode, classname, dynamicstyle, or
   const date = new Date()
   return connection.execute(
     // "delete from section where section_id =?", [id]
-    "UPDATE subPANEL SET subPANEL_CODE = ?, panel_CODE = ?, subPANEL_CLASSNAME = ?, subPANEL_DYNAMICSTYLE = ?, subPANEL_ORDER = ?, subPANEL_DATEUPDATED = ? WHERE subPANEL_ID = ?"
+    "UPDATE subpanel SET subPANEL_CODE = ?, panel_CODE = ?, subPANEL_CLASSNAME = ?, subPANEL_DYNAMICSTYLE = ?, subPANEL_ORDER = ?, subPANEL_DATEUPDATED = ? WHERE subPANEL_ID = ?"
     , [code, sectionCode, classname, dynamicstyle, order, date, id]
   );
 };
@@ -37,7 +37,7 @@ const updateSubPanel = async (id, code, sectionCode, classname, dynamicstyle, or
 const deleteSubPanel = async (id) => {
   const connection = await getConnection();
   return connection.execute(
-    "delete from panelpanel where subpanel_id =?", [id]
+    "delete from panel  where subpanel_id =?", [id]
   );
 };
 

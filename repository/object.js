@@ -34,7 +34,7 @@ const createObject = async (code, name, type, subPanelCode, className, text, sty
   const date = new Date()
   return connection.execute(
     // "delete from section where section_id =?", [id]
-    "INSERT INTO OBJECT (object_code, object_name, object_type, subpanel_code, object_classname, object_text, object_dynamicstyle, object_datecreated, object_dateupdated, object_src,  object_order) " +
+    "INSERT INTO object (object_code, object_name, object_type, subpanel_code, object_classname, object_text, object_dynamicstyle, object_datecreated, object_dateupdated, object_src,  object_order) " +
     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", [code, name, type, subPanelCode, className, text, style, date, date, src, order]
   );
 };
