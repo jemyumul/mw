@@ -26,7 +26,7 @@ const createSection = async (code, classname, dynamicstyle, order) => {
   const date = new Date()
   return connection.execute(
     // "delete from section where section_id =?", [id]
-    "INSERT INTO SECTION (section_code, section_classname, section_dynamicstyle, section_datecreated, section_dateupdated, section_order) " +
+    "INSERT INTO section (section_code, section_classname, section_dynamicstyle, section_datecreated, section_dateupdated, section_order) " +
     "VALUES (?, ?, ?, ?, ?, ?)", [code, classname, dynamicstyle, date, date, order]
   );
 };
@@ -36,7 +36,7 @@ const updateSection = async (id, code, classname, dynamicstyle, order) => {
   const date = new Date()
   return connection.execute(
     // "delete from section where section_id =?", [id]
-    "UPDATE SECTION SET SECTION_CODE = ?, SECTION_CLASSNAME = ?, SECTION_DYNAMICSTYLE = ?, SECTION_ORDER = ?, SECTION_DATEUPDATED = ? WHERE SECTION_ID = ?"
+    "UPDATE section SET SECTION_CODE = ?, SECTION_CLASSNAME = ?, SECTION_DYNAMICSTYLE = ?, SECTION_ORDER = ?, SECTION_DATEUPDATED = ? WHERE SECTION_ID = ?"
     , [code, classname, dynamicstyle, order, date, id]
   );
 };
