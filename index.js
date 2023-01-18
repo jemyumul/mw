@@ -63,7 +63,7 @@ app.use(express.json());
 
 app.use(cors());
 
-app.listen(8081, () => console.log("API Server is running..."));
+app.listen(process.env.PORT || 5000, () => console.log("API Server is running..."));
 
 //#region Test Routes
 app.get("/", (req, res) => {
