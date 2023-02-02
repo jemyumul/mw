@@ -37,7 +37,16 @@ const { //FOR OBJECTS REFERENCES
     deleteObject,
     getSideNavChildren,
     insertSideNavChildren,
-    deleteSideNavChildren
+    deleteSideNavChildren,
+    insertAccordionChildren,
+    getAccordionChildren,
+    deleteAccordionChildren,
+    getAccordionPlaceChildren,
+    insertAccordionPlaceChildren,
+    deleteAccordionPlaceChildren,
+    getAccordionImageChildren,
+    insertAccordionImageChildren,
+    deleteAccordionImageChildren
 } = require("./repository/object")
 
 const { //FOR MAIN REFERENCES
@@ -45,7 +54,10 @@ const { //FOR MAIN REFERENCES
     getPanels,
     getSubPanels,
     getObjects,
-    getSideNavs
+    getSideNavs,
+    getAccordions,
+    getAccordionPlaces,
+    getAccordionImages
 } = require("./repository/main")
 
 const genericError = "Sorry, something went wrong!"
@@ -58,7 +70,7 @@ const { networkInterfaces } = require('os');
 app.use(express.json());
 
 // app.use(cors({
-//     origin: 'http://localhost:3000'
+//     origin: 'http://192.168.254.197:3000'
 // }));
 
 app.use(cors());
@@ -69,7 +81,7 @@ app.listen(process.env.PORT || 5000, () => console.log("API Server is running...
 //#region Test Routes
 app.get("/", (req, res) => {
     res.json({ message: "ok" });
-  });
+});
 
 app.get("/outfit", (req, res) => {
     const tops = ['Black', 'White', 'Orange', 'Navy Blue'];
@@ -132,7 +144,7 @@ app.get("/section", async function (request, response) { //for section list
 app.get("/section/:id", async function (request, response) { //get specific section
     try {
         const { id } = request.params;
-        const [result] = await getSectionViaID(id)    
+        const [result] = await getSectionViaID(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -147,7 +159,7 @@ app.post("/section/delete/:id", async function (request, response) { //delete sp
     try {
         const { id } = request.params;
         //console.log(id);                        
-        const [result] = await deleteSection(id)    
+        const [result] = await deleteSection(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -160,8 +172,8 @@ app.post("/section/delete/:id", async function (request, response) { //delete sp
 
 app.post("/section/new", async function (request, response) { //create specific section
     try {
-        const {code, className, style, orderNo} = request.body.formData;
-        const [result] = await createSection(code, className, style, orderNo)    
+        const { code, className, style, orderNo } = request.body.formData;
+        const [result] = await createSection(code, className, style, orderNo)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -175,8 +187,8 @@ app.post("/section/new", async function (request, response) { //create specific 
 app.post("/section/update/:id", async function (request, response) { //create specific section
     try {
         const { id } = request.params;
-        const { code, className, style, orderNo} = request.body.formData;
-        const [result] = await updateSection(id, code, className, style, orderNo)    
+        const { code, className, style, orderNo } = request.body.formData;
+        const [result] = await updateSection(id, code, className, style, orderNo)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -209,7 +221,7 @@ app.get("/panel", async function (request, response) {
 app.get("/panel/:id", async function (request, response) {
     try {
         const { id } = request.params;
-        const [result] = await getPanelViaID(id)    
+        const [result] = await getPanelViaID(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -222,8 +234,8 @@ app.get("/panel/:id", async function (request, response) {
 
 app.post("/panel/new", async function (request, response) { //create specific section
     try {
-        const {code, sectionCode, className, style, orderNo} = request.body.formData;
-        const [result] = await createPanel(code, sectionCode, className, style, orderNo)    
+        const { code, sectionCode, className, style, orderNo } = request.body.formData;
+        const [result] = await createPanel(code, sectionCode, className, style, orderNo)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -238,7 +250,7 @@ app.post("/panel/delete/:id", async function (request, response) { //delete spec
     try {
         const { id } = request.params;
         //console.log(id);                        
-        const [result] = await deletePanel(id)    
+        const [result] = await deletePanel(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -252,8 +264,8 @@ app.post("/panel/delete/:id", async function (request, response) { //delete spec
 app.post("/panel/update/:id", async function (request, response) { //create specific section
     try {
         const { id } = request.params;
-        const { code, sectionCode, className, style, orderNo} = request.body.formData;
-        const [result] = await updatePanel(id, code, sectionCode, className, style, orderNo)    
+        const { code, sectionCode, className, style, orderNo } = request.body.formData;
+        const [result] = await updatePanel(id, code, sectionCode, className, style, orderNo)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -285,7 +297,7 @@ app.get("/subpanel", async function (request, response) {
 app.get("/subpanel/:id", async function (request, response) {
     try {
         const { id } = request.params;
-        const [result] = await getSubPanelViaID(id)    
+        const [result] = await getSubPanelViaID(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -298,8 +310,8 @@ app.get("/subpanel/:id", async function (request, response) {
 
 app.post("/subpanel/new", async function (request, response) { //create specific section
     try {
-        const {code, panelCode, className, style, orderNo} = request.body.formData;
-        const [result] = await createSubPanel(code, panelCode, className, style, orderNo)    
+        const { code, panelCode, className, style, orderNo } = request.body.formData;
+        const [result] = await createSubPanel(code, panelCode, className, style, orderNo)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -314,7 +326,7 @@ app.post("/subpanel/delete/:id", async function (request, response) { //delete s
     try {
         const { id } = request.params;
         //console.log(id);                        
-        const [result] = await deleteSubPanel(id)    
+        const [result] = await deleteSubPanel(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -328,8 +340,8 @@ app.post("/subpanel/delete/:id", async function (request, response) { //delete s
 app.post("/subpanel/update/:id", async function (request, response) { //create specific section
     try {
         const { id } = request.params;
-        const { code, panelCode, className, style, orderNo} = request.body.formData;
-        const [result] = await updateSubPanel(id, code, panelCode, className, style, orderNo)    
+        const { code, panelCode, className, style, orderNo } = request.body.formData;
+        const [result] = await updateSubPanel(id, code, panelCode, className, style, orderNo)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -359,7 +371,7 @@ app.get("/object", async function (request, response) {
 app.get("/object/:id", async function (request, response) {
     try {
         const { id } = request.params;
-        const [result] = await getObjectViaID(id)    
+        const [result] = await getObjectViaID(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -372,9 +384,9 @@ app.get("/object/:id", async function (request, response) {
 
 app.post("/object/new", async function (request, response) { //create specific section
     try {
-        const {code, name, type, subPanelCode, className, text, style, src, order} = request.body.formData;
+        const { code, name, type, subPanelCode, className, text, style, src, reference, order } = request.body.formData;
         //console.log(request.body.formData);
-        const [result] = await createObject(code, name, type, subPanelCode, className, text, style, src, order)    
+        const [result] = await createObject(code, name, type, subPanelCode, className, text, style, src, reference, order)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -389,7 +401,7 @@ app.post("/object/delete/:id", async function (request, response) { //delete spe
     try {
         const { id } = request.params;
         //console.log(id);                        
-        const [result] = await deleteObject(id)    
+        const [result] = await deleteObject(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -403,8 +415,8 @@ app.post("/object/delete/:id", async function (request, response) { //delete spe
 app.post("/object/update/:id", async function (request, response) { //create specific section
     try {
         const { id } = request.params;
-        const { code, name, type, subPanelCode, className, text, style, src, order} = request.body.formData;
-        const [result] = await updateObject(id, code, name, type, subPanelCode, className, text, style, src, order)    
+        const { code, name, type, subPanelCode, className, text, style, src, reference, order } = request.body.formData;
+        const [result] = await updateObject(id, code, name, type, subPanelCode, className, text, style, src, reference, order)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -414,6 +426,8 @@ app.post("/object/update/:id", async function (request, response) { //create spe
         })
     }
 })
+
+
 
 app.get("/object/sidenavchildren/:id", async function (request, response) { //create specific section
     try {
@@ -434,10 +448,10 @@ app.post("/object/sidenavchildren/new/:id", async function (request, response) {
         const { id } = request.params;
         const sideNavs = request.body.sideNavState;
         sideNavs.forEach(element => {
-            insertSideNavChildren(id, element.Value, element.ClassName, element.Style, element.Order)
+            insertSideNavChildren(id, element.Value, element.ClassName, element.Style, element.Reference, element.Order)
         });
         // const [result] = await getSideNavChildren(id)
-        response.send({ success: true})
+        response.send({ success: true })
     } catch (error) {
         console.log(error);
         response.status(500).send({
@@ -451,7 +465,7 @@ app.post("/object/sidenavchildren/delete/:id", async function (request, response
     try {
         const { id } = request.params;
         //console.log(id);                        
-        const [result] = await deleteSideNavChildren(id)    
+        const [result] = await deleteSideNavChildren(id)
         response.send({ success: true, result })
     } catch (error) {
         console.log(error);
@@ -461,6 +475,149 @@ app.post("/object/sidenavchildren/delete/:id", async function (request, response
         })
     }
 })
+
+app.get("/object/accordionchildren/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        const [result] = await getAccordionChildren(id)
+        response.send({ success: true, result })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.post("/object/accordionchildren/new/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        const sideNavs = request.body.accordionState;
+        sideNavs.forEach(element => {
+            insertAccordionChildren(id, element.Title, element.Body, element.ClassName, element.Style, element.Order)
+        });
+        // const [result] = await getSideNavChildren(id)
+        response.send({ success: true })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.post("/object/accordionchildren/delete/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        //console.log(id);                        
+        const [result] = await deleteAccordionChildren(id)
+        response.send({ success: true, result })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.get("/object/accordionplacechildren/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        const [result] = await getAccordionPlaceChildren(id)
+        response.send({ success: true, result })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.post("/object/accordionplacechildren/new/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        const sideNavs = request.body.accordionPlaceState;
+        sideNavs.forEach(element => {
+            insertAccordionPlaceChildren(id, element.Title, element.Body, element.ClassName, element.Style, element.Order)
+        });
+        // const [result] = await getSideNavChildren(id)
+        response.send({ success: true })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.post("/object/accordionplacechildren/delete/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        //console.log(id);                        
+        const [result] = await deleteAccordionPlaceChildren(id)
+        response.send({ success: true, result })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.get("/object/accordionimagechildren/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        const [result] = await getAccordionImageChildren(id)
+        response.send({ success: true, result })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.post("/object/accordionimagechildren/new/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        const sideNavs = request.body.accordionImageState;
+        sideNavs.forEach(element => {
+            insertAccordionImageChildren(id, element.Title, element.Body, element.ClassName, element.Style, element.Order)
+        });
+        // const [result] = await getSideNavChildren(id)
+        response.send({ success: true })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+app.post("/object/accordionimagechildren/delete/:id", async function (request, response) { //create specific section
+    try {
+        const { id } = request.params;
+        //console.log(id);                        
+        const [result] = await deleteAccordionImageChildren(id)
+        response.send({ success: true, result })
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({
+            success: false,
+            error: genericError,
+        })
+    }
+})
+
+
 //#endregion
 
 //#region main routes
@@ -471,24 +628,97 @@ app.get("/main", async function (request, response) {
         const [subpanel] = await getSubPanels()
         const [object] = await getObjects()
         const [sidenavchildren] = await getSideNavs()
-        
+        const [accordionchildren] = await getAccordions()
+        const [accordionplacechildren] = await getAccordionPlaces()
+        const [accordionimagechildren] = await getAccordionImages()
+
+        // console.log(accordionchildren)
+        // console.log(accordionplacechildren)
+        // console.log(accordionimagechildren)
+
         object.forEach(e => {
-            if(e.ObjectDynamicStyle === null){
+            if (e.ObjectDynamicStyle === null || e.ObjectDynamicStyle === '') {
                 e.ObjectDynamicStyle = {}
             }
-            else{
+            else {
                 e.ObjectDynamicStyle = JSON.parse(e.ObjectDynamicStyle)
             }
-            if(e.ObjectType === 'sideNav'){ //DEFINE CHILDREN HERE
+            if (e.ObjectType === 'sideNav') { //DEFINE CHILDREN HERE
                 e.Children = [];
                 sidenavchildren.forEach(s => {
-                    if(s.DynamicStyle === null){
+                    if (s.DynamicStyle === null) {
                         s.DynamicStyle = {}
                     }
-                    else{
+                    else {
                         s.DynamicStyle = JSON.parse(s.DynamicStyle)
                     }
-                    if(e.ObjectId === s.ObjectId){
+                    if (e.ObjectId === s.ObjectId) {
+                        e.Children.push(s);
+                    }
+                })
+            }
+            if (e.ObjectType === 'accordion') { //DEFINE CHILDREN HERE
+                e.Children = [];
+                console.log(e)
+                accordionchildren.forEach(s => {
+                    if (e.ObjectId === s.ObjectId) {
+                        if (s.DynamicStyle === null || s.DynamicStyle === '') {
+                            s.DynamicStyle = {}
+                        }
+                        else {
+                            s.DynamicStyle = JSON.parse(s.DynamicStyle)
+                        }
+                        if(s.Body === null || s.Body === ''){
+                            s.Body = [];
+                        }
+                        else
+                        {
+                          
+                            s.Body = JSON.parse(s.Body);
+                        }
+                        e.Children.push(s);
+                    }
+                })
+            }
+            if (e.ObjectType === 'accordionplace') { //DEFINE CHILDREN HERE
+                e.Children = [];
+                accordionplacechildren.forEach(s => {
+                    if (e.ObjectId === s.ObjectId) {
+                        if (s.DynamicStyle === null || s.DynamicStyle === '') {
+                            s.DynamicStyle = {}
+                        }
+                        else {
+                            s.DynamicStyle = JSON.parse(s.DynamicStyle)
+                        }
+                        if(s.Body === null || s.Body === ''){
+                            s.Body = [];
+                        }
+                        else
+                        {
+                            s.Body = JSON.parse(s.Body);
+                        }
+                        e.Children.push(s);
+                    }
+                })
+            }
+            if (e.ObjectType === 'accordionimage') { //DEFINE CHILDREN HERE
+                e.Children = [];
+                accordionimagechildren.forEach(s => {
+                    if (e.ObjectId === s.ObjectId) {
+                        if (s.DynamicStyle === null || s.DynamicStyle === '') {
+                            s.DynamicStyle = {}
+                        }
+                        else {
+                          
+                            s.DynamicStyle = JSON.parse(s.DynamicStyle)
+                        }
+                        if(s.Body === null || s.Body === ''){
+                            s.Body = [];
+                        }
+                        else
+                        {
+                            s.Body = JSON.parse(s.Body);
+                        }
                         e.Children.push(s);
                     }
                 })
@@ -499,15 +729,15 @@ app.get("/main", async function (request, response) {
         let ctr = 0;
         subpanel.forEach(e => {
             e.Objects = [];
-            if(e.DynamicStyle === null){
+            if (e.DynamicStyle === null || e.DynamicStyle === '') {
                 e.DynamicStyle = {}
             }
-            else{
+            else {
                 e.DynamicStyle = JSON.parse(e.DynamicStyle)
             }
-            
+
             object.forEach(o => {
-                if(e.SubPanelCode === o.SubPanelCode){
+                if (e.SubPanelCode === o.SubPanelCode) {
                     e.Objects.push(o);
                 }
             })
@@ -518,37 +748,35 @@ app.get("/main", async function (request, response) {
         panels.forEach(p => {
             p.SubPanels = [];
             // p.DynamicStyle = p.DynamicStyle == null ? {} : JSON.parse(p.DynamicStyle)
-            if(p.DynamicStyle === null){
+            if (p.DynamicStyle === null || p.DynamicStyle === '') {
                 p.DynamicStyle = {}
             }
-            else{
+            else {
                 p.DynamicStyle = JSON.parse(p.DynamicStyle)
             }
             subpanel.forEach(sp => {
-                if(p.PanelCode === sp.PanelCode){
+                if (p.PanelCode === sp.PanelCode) {
                     p.SubPanels.push(sp);
                 }
             })
         })
 
-
         sections.forEach(s => {
             s.Panels = [];
             // s.DynamicStyle = s.DynamicStyle == null ? {} : JSON.parse(s.DynamicStyle)
-            
-            if(s.DynamicStyle === null){
+            if (s.DynamicStyle === null || s.DynamicStyle === '') {
                 s.DynamicStyle = {}
             }
-            else{
+            else {
                 s.DynamicStyle = JSON.parse(s.DynamicStyle)
             }
             panels.forEach(p => {
-                if(p.SectionCode === s.SectionCode){
+                if (p.SectionCode === s.SectionCode) {
                     s.Panels.push(p)
                 }
             })
         })
-        
+
         const result = sections
         response.send({ success: true, result })
     } catch (error) {

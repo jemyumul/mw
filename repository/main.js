@@ -24,14 +24,35 @@ const getSubPanels = async () => {
 const getObjects = async () => {
     const connection = await getConnection();
     return connection.execute(
-        "select object_id as ObjectId, object_code as ObjectCode, object_type as ObjectType, object_src as ObjectSrc , object_classname as ClassName, object_text as ObjectText, object_dynamicstyle as ObjectDynamicStyle, object_order as ObjectOrder, subpanel_code as SubPanelCode from object order by object_order"
+        "select object_id as ObjectId, object_code as ObjectCode, object_type as ObjectType, object_src as ObjectSrc , object_classname as ClassName, object_text as ObjectText, object_dynamicstyle as ObjectDynamicStyle, object_order as ObjectOrder, object_reference as Reference, subpanel_code as SubPanelCode from object order by object_order"
     );
 };
 
 const getSideNavs = async () => {
     const connection = await getConnection();
     return connection.execute(
-        "select object_id as ObjectId, object_code as ObjectCode, sidenavchildren_value as Value, sidenavchildren_classname as ClassName , sidenavchildren_style as DynamicStyle, sidenavchildren_order as 'Order' from sidenavchildren order by sidenavchildren_order"
+        "select object_id as ObjectId, object_code as ObjectCode, sidenavchildren_value as Value, sidenavchildren_classname as ClassName , sidenavchildren_style as DynamicStyle, sidenavchildren_reference as Reference, sidenavchildren_order as 'Order' from sidenavchildren order by sidenavchildren_order"
+    );
+}
+
+const getAccordions = async () => {
+    const connection = await getConnection();
+    return connection.execute(
+        "select object_id as ObjectId, object_code as ObjectCode, accordionchildren_title as Title, accordionchildren_body as Body , accordionchildren_classname as ClassName, accordionchildren_style as DynamicStyle, accordionchildren_order as 'Order' from accordionchildren order by accordionchildren_order"
+    );
+}
+
+const getAccordionPlaces = async () => {
+    const connection = await getConnection();
+    return connection.execute(
+        "select object_id as ObjectId, object_code as ObjectCode, accordionplacechildren_title as Title, accordionplacechildren_body as Body , accordionplacechildren_classname as ClassName, accordionplacechildren_style as DynamicStyle, accordionplacechildren_order as 'Order' from accordionplacechildren order by accordionplacechildren_order"
+    );
+}
+
+const getAccordionImages = async () => {
+    const connection = await getConnection();
+    return connection.execute(
+        "select object_id as ObjectId, object_code as ObjectCode, accordionimagechildren_title as Title, accordionimagechildren_body as Body , accordionimagechildren_classname as ClassName, accordionimagechildren_style as DynamicStyle, accordionimagechildren_order as 'Order' from accordionimagechildren order by accordionimagechildren_order"
     );
 }
 
@@ -41,5 +62,8 @@ module.exports = {
     getPanels,
     getSubPanels,
     getObjects,
-    getSideNavs
+    getSideNavs,
+    getAccordions,
+    getAccordionPlaces,
+    getAccordionImages
 };

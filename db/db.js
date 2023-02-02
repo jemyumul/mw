@@ -4,6 +4,14 @@ const parseDbUrl = require("parse-database-url");
 async function getConnection() {
   // create the connection
   // const connection = await mysql.createConnection({
+  //   host: "localhost",
+  //   port:  3306,
+  //   user: "root",
+  //   password: "",
+  //   database: "maxwax",
+  // });
+
+  //  const connection = await mysql.createConnection({
   //   host: "web.r2groupofcompanies.com",
   //   port:  3306,
   //   user: "maxwax_test",
